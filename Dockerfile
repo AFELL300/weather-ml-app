@@ -2,10 +2,15 @@ FROM python:3.9-slim
 
 # Set the working directory in the container
 
+WORKDIR /app
 
 # Install dependencies
 
+RUN pip install numpy scikit-learn
+RUN pip install Flask gunicorn
+
 # Copy the rest of the application code
+COPY . .
 
 # Run the app
-
+RUN python3 app.py
