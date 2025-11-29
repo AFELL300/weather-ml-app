@@ -19,9 +19,12 @@ jobs:
         # Remove the pulled docker container if it exists 
       - name: Delete Docker container 
         run:  docker rm -f weather-ml-app || true 
-        
-      - name: Run Docker container 
-        run: sudo docker container run --detach --publish 5000:5000 --name weather-ml-app ${{ secrets.DOCKERHUB_USERNAME }}/weather-ml-app:latest
+
+      - name: Apply Kubernetes deployment
+        run: kubectl apply -f k8s/deployment.yml
+
+      - name: Apply Kubernetes service
+        run: kubectl apply -f k8s/service.yml
       
       - name: Deploy to Kubernetes
         run: |
