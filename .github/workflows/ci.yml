@@ -21,7 +21,7 @@ jobs:
     - name: Setup python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.12.3'
+        python-version: 3.12.3
 
     # Install dependencies
     - name: Install Dependencies 
@@ -32,18 +32,18 @@ jobs:
         
     - name: Run smoke test 
       run: | 
-        source flaskappenv/bin/activate 
-        python3 -m unittest smoke_test.py 
+        source flaskappenv/bin/python 
+        python -m unittest tests/smoke_test.py 
     
     - name: Run unit test 
       run: | 
-        source flaskappenv/bin/activate 
-        python3 -m unittest unit_test.py 
+        source flaskappenv/bin/ 
+        python -m unittest tests/unit_test.py 
 
     - name: Run integration test 
       run: | 
-        source flaskappenv/bin/activate 
-        python3 -m unittest integration_test.py 
+        source flaskappenv/bin 
+        python -m unittest tests/integration_test.py 
 
     - name: Docker Login 
       uses: docker/login-action@v3 
