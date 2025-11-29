@@ -1,11 +1,13 @@
 name: CD pipeline 
 on: 
-  push: 
-    branches: 
-      - main 
+ workflow_run:
+    workflows: ["CI Pipeline"]
+    types:
+      - completed
 
 jobs: 
-  Deploy: 
+  Deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: self-hosted 
     steps: 
       - name: Checkout code 
@@ -20,3 +22,8 @@ jobs:
         
       - name: Run Docker container 
         run: sudo docker container run --detach --publish 5000:5000 --name weather-ml-app ${{ secrets.DOCKERHUB_USERNAME }}/weather-ml-app:latest
+      
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl set image deployment/weather-ml-app weather-ml-app=${{ secrets.DOCKERHUB_USERNAME }}
+          kubectl rollout status deployment/weather-ml-app
