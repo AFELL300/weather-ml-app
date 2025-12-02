@@ -12,6 +12,7 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    
     steps:
     # Checkout Repo
     - name: Checkout code
@@ -26,25 +27,20 @@ jobs:
     # Install dependencies
     - name: Install Dependencies 
       run: | 
-        python3 -m venv flaskappenv   
-        source flaskappenv/bin/activate
         pip install --upgrade pip
         pip install -r requirements.txt
         pip install Flask gunicorn
         
     - name: Run smoke test 
       run: | 
-        source flaskappenv/bin/ 
         python -m unittest tests/smoke_test.py 
     
     - name: Run unit test 
       run: | 
-        source flaskappenv/bin/ 
         python -m unittest tests/unit_test.py 
 
     - name: Run integration test 
       run: | 
-        source flaskappenv/bin 
         python -m unittest tests/integration_test.py 
 
     - name: Docker Login 
