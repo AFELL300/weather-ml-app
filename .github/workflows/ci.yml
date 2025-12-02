@@ -30,6 +30,7 @@ jobs:
         source flaskappenv/bin/activate
         pip install --upgrade pip
         pip install -r requirements.txt
+        pip install Flask gunicorn
         
     - name: Run smoke test 
       run: | 
