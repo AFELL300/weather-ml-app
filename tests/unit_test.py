@@ -23,7 +23,7 @@ class TestUnit(unittest.TestCase):
 		response = self.client.post('/', data=form_data)
 
 		# check that the correct error message is returned to indicate a missing field
-		self.assertTrue(b'error processing input' in response.data.lower(), 'Error: Missing field processed incorrectly.')
+		self.assertIn(b'error processing input', response.data.lower(), 'Error: Missing field processed incorrectly.')
 	
 
 	# Complete this function to test that the model can be loaded correctly
