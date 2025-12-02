@@ -21,7 +21,8 @@ spec:
     spec:
       containers:
       - name: weather-ml-app
-        image: afell300/weather-ml-app:1.0
+        image: afell300/weather-ml-app:latest
         ports:
         - containerPort: 5000
         imagePullPolicy: Always
+
