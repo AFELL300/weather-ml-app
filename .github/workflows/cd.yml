@@ -11,7 +11,18 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
       - name: Checkout code 
-        uses: actions/checkout@v4 
+        uses: actions/checkout@v4
+
+      - name: Start Minikube
+        run: |
+          minikube start --driver=none
+          minikube status
+
+      - name: Set Docker env for Minikube
+        run: eval $(minikube docker-env)
+        
+      - name: Pull Docker image
+        run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/weather-ml-app:latest
         
       - name: Pull Docker image 
         run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/weather-ml-app:latest 
