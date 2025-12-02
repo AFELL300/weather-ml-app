@@ -8,14 +8,15 @@ app = Flask(__name__)
 weather_classes = ['clear', 'cloudy', 'drizzly', 'foggy', 'hazey', 'misty', 'rainy', 'smokey', 'thunderstorm']
 
 def load_model(model_path = 'model/model.pkl'):
-	return pickle.load(open(model_path, 'rb'))
+        with open(model_path, 'rb') as f:
+                return pickle.load(f)
 
 def classify_weather(features):
 	model = load_model()
 	start = time.time()
 	prediction_index = model.predict(features)[0]
 	latency = round((time.time() - start) * 1000, 2) #we are here
-	prediction = weather_classes[1]
+	prediction = weather_classes[prediction_index] # Prediction index was not used
 	
 	return prediction, latency
 
@@ -25,11 +26,11 @@ def home():
 	if request.method == 'POST':
 		try:
 			# Extract floats from form data
-			temperature = request.form['temperature']
-			pressure = request.form['pressure']
-			humidity = request.form['humidity']
-			wind_speed = request.form['wind_speed']
-			wind_deg = request.form['wind_deg']
+			temperature = float(request.form.get('temperature', 0) or 0)
+			pressure = float(request.form.get('pressure', 0) or 0)
+			humidity = float(request.form.get('humidity', 0) or 0)
+			wind_speed = float(request.form.get('wind_speed', 0) or 0)
+			wind_deg = float(request.form.get('wind_deg', 0) or 0)
 			rain_1h = float(request.form.get('rain_1h', 0) or 0)
 			rain_3h = float(request.form.get('rain_3h', 0) or 0)
 			snow = float(request.form.get('snow', 0) or 0)
