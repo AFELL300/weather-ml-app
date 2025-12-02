@@ -27,7 +27,8 @@ jobs:
     - name: Install Dependencies 
       run: | 
         python3 -m venv flaskappenv   
-        source flaskappenv/bin/activate 
+        source flaskappenv/bin/activate
+        pip install --upgrade pip
         pip install -r requirements.txt
         
     - name: Run smoke test 
