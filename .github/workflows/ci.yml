@@ -32,7 +32,7 @@ jobs:
         
     - name: Run smoke test 
       run: | 
-        source flaskappenv/bin/python 
+        source flaskappenv/bin/ 
         python -m unittest tests/smoke_test.py 
     
     - name: Run unit test 
