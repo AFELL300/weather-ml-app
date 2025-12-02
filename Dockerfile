@@ -6,7 +6,8 @@ WORKDIR /app
 
 # Install dependencies
 
-RUN pip install numpy scikit-learn
+RUN pip install numpy=1.6.1
+RUN pip install scikit-learn
 RUN pip install Flask gunicorn
 
 # Copy the rest of the application code

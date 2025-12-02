@@ -23,7 +23,7 @@ class TestUnit(unittest.TestCase):
 		response = self.client.post('/', data=form_data)
 
 		# check that the correct error message is returned to indicate a missing field
-		self.assertTrue(b'error processing input' in response.data.lower(), 'Error: Missing field processed incorrectly.')
+		self.assertIn(b'error processing input', response.data.lower(), 'Error: Missing field processed incorrectly.')
 	
 
 	# Complete this function to test that the model can be loaded correctly
@@ -50,12 +50,12 @@ class TestUnit(unittest.TestCase):
 		self.assertEqual(class_result, 'rainy', 'Error: Expected class "rainy" not returned.')
 		
 
-	def test_foggy_classification_output(self):
-		test_input = np.array([289.47,1015,88,2,300,0,0,0,20]).reshape(1,-1)
-		class_result, _ = classify_weather(test_input) 
+	def test_cloudy_classification_output(self):
+		test_input = np.array([291.15,1028,61,1,260,0,0,0,75]).reshape(1,-1)
+		class_result, _  = classify_weather(test_input) 
 
-		# Ensure that 'foggy' class is returned
-		self.assertEqual(class_result, 'foggy', 'Error: Expected class "foggy" not returned.')
+		# Ensure that 'cloudy' class is returned
+		self.assertEqual(class_result, 'cloudy')
 		
 if __name__ == '__main__':
 	unittest.main()
