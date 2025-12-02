@@ -8,24 +8,10 @@ on:
 jobs: 
   Deploy:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps: 
       - name: Checkout code 
         uses: actions/checkout@v4
-
-      - name: Start Minikube
-        run: |
-          minikube start --driver=none
-          minikube status
-
-      - name: Set Docker env for Minikube
-        run: eval $(minikube docker-env)
-        
-      - name: Pull Docker image
-        run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/weather-ml-app:latest
-        
-      - name: Pull Docker image 
-        run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/weather-ml-app:latest 
 
       - name: Apply Kubernetes deployment
         run: kubectl apply -f k8s/deployment.yaml
