@@ -13,13 +13,25 @@ jobs:
       - name: Checkout code 
         uses: actions/checkout@v1
 
+      - name: Download image version from CI
+        uses: actions/download-artifact@v3
+        with:
+          name: image-version
+          path: ./version
+
+      - name: Read IMAGE_VERSION
+        id: get_version
+        run: |
+          IMAGE_VERSION=$(cat ./version/image_version.txt)
+          echo "IMAGE_VERSION=$IMAGE_VERSION" >> $GITHUB_ENV
+
       - name: Apply Kubernetes Deployment & Service
         run: |
+          sed -i "s|{{IMAGE_VERSION}}|${{ env.IMAGE_VERSION }}|g" k8s/deployment.yaml
           kubectl apply -f k8s/deployment.yaml
           kubectl apply -f k8s/service.yaml
-      
+
       - name: Deploy to Kubernetes
         run: |
-          kubectl set image deployment/weather-ml-app \
-            weather-ml-app=${{ secrets.DOCKERHUB_USERNAME }}/weather-ml-app:latest
+          kubectl set image deployment/weather-ml-app weather-ml-app=afell300/weather-ml-app:${{ env.IMAGE_VERSION }}
           kubectl rollout status deployment/weather-ml-app

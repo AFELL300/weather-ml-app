@@ -8,6 +8,9 @@ on:
   pull_request:
     branches: -main
 
+env:
+  IMAGE_VERSION: v2
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -53,4 +56,11 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{secrets.DOCKERHUB_USERNAME}}/weather-ml-app:v2
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/weather-ml-app:${{ env.IMAGE_VERSION }}
+
+      - name: Save image version to artifact
+        run: echo "${{ env.IMAGE_VERSION }}" > image_version.txt
+      - uses: actions/upload-artifact@v3
+        with:
+          name: image-version
+          path: image_version.txt
