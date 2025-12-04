@@ -1,0 +1,38 @@
+---
+- name: Install and Start Minikube
+  hosts: localhost
+  user: ubuntu
+  become: yes
+
+  tasks:
+    - name: 1. Install dependencies
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      with_items:
+        - curl
+        - conntrack
+
+    - name: 2. Download Minikube
+      get_url:
+        url: https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+        dest: /usr/local/bin/minikube
+        mode: '0755'
+
+    - name: 3. Start Minikube
+      become: no
+      shell: minikube start --driver=docker --force
+      register: minikube_output
+      failed_when:
+        - minikube_output.rc != 0
+        - "'already exists' not in minikube_output.stderr"
+
+    - name: 4. Verify Minikube status
+      become: no
+      shell: minikube status
+      register: minikube_status
+
+    - name: 5. Display Minikube status
+      debug:
+        msg: "{{ minikube_status.stdout }}"

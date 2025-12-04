@@ -1,0 +1,42 @@
+---
+- name: Deploy Application to Kubernetes
+  hosts: localhost
+  user: ubuntu
+  become: no
+
+  vars:
+    app_dir: "/home/ubuntu/ansible/k8s"
+    docker_image: "afell300/weather-ml-app:1.0"
+
+  tasks:
+    - name: 1. Pull Docker image into Minikube
+      shell: minikube ssh "docker pull {{ docker_image }}"
+
+    - name: 2. Apply Kubernetes deployment and scale to 3 replicas
+      shell:
+        cmd: kubectl apply -f deployment.yaml
+      args:
+        chdir: "{{ app_dir }}"
+
+    - name: 3. Apply Kubernetes service
+      shell:
+        cmd: kubectl apply -f service.yaml
+      args:
+        chdir: "{{ app_dir }}"
+
+    - name: 4. Wait for deployment to be ready
+      shell:
+        cmd: kubectl rollout status deployment/weather-ml-app
+      register: rollout_status
+
+    - name: 5. Display deployment status
+      debug:
+        msg: "{{ rollout_status.stdout }}"
+
+    - name: 6. Get all pods
+      shell: kubectl get pods
+      register: pods_output
+
+    - name: 7. Display running pods
+      debug:
+        msg: "{{ pods_output.stdout }}"

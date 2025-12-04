@@ -1,0 +1,4 @@
+---
+- import_playbook: install-kubectl.yml
+- import_playbook: install-minikube.yml
+- import_playbook: deploy-app.yml
