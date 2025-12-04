@@ -60,7 +60,7 @@ jobs:
 
       - name: Save image version to artifact
         run: echo "${{ env.IMAGE_VERSION }}" > image_version.txt
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: image-version
           path: image_version.txt
