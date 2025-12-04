@@ -9,14 +9,7 @@ jobs:
   Deploy:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: self-hosted
-    steps:
-      
-      # Set Version Env Variable
-      - name: Set version environment variable
-        run: |
-          VERSION=$(cat version.txt)
-          echo "IMAGE_VERSION=$VERSION" >> $GITHUB_ENV
-      
+    steps: 
       - name: Checkout code 
         uses: actions/checkout@v1
 
@@ -24,9 +17,9 @@ jobs:
         run: |
           kubectl apply -f k8s/deployment.yaml
           kubectl apply -f k8s/service.yaml
-
+      
       - name: Deploy to Kubernetes
         run: |
           kubectl set image deployment/weather-ml-app \
-            weather-ml-app=afell300/weather-ml-app:${{ env.IMAGE_VERSION }}
+            weather-ml-app=${{ secrets.DOCKERHUB_USERNAME }}/weather-ml-app:latest
           kubectl rollout status deployment/weather-ml-app
