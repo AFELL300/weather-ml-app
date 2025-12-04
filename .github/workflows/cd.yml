@@ -9,20 +9,16 @@ jobs:
   Deploy:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: self-hosted
-    steps: 
+    steps:
+      
+      # Set Version Env Variable
+      - name: Set version environment variable
+        run: |
+          VERSION=$(cat version.txt)
+          echo "IMAGE_VERSION=$VERSION" >> $GITHUB_ENV
+      
       - name: Checkout code 
         uses: actions/checkout@v1
-
-      - name: Download image version artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: image-version
-          path: .
-
-      - name: Read image version into environment variable
-        run: |
-          IMAGE_VERSION=$(cat image-version.txt)
-          echo "IMAGE_VERSION=$IMAGE_VERSION" >> $GITHUB_ENV
 
       - name: Apply Kubernetes Deployment & Service
         run: |

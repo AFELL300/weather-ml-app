@@ -8,16 +8,17 @@ on:
   pull_request:
     branches: -main
 
-env:
-  IMAGE_VERSION: v2
-
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    env:
-      IMAGE_VERSION: v2
 
     steps:
+      # Set Version Env Variable
+      - name: Set version environment variable
+        run: |
+          VERSION=$(cat version.txt)
+          echo "IMAGE_VERSION=$VERSION" >> $GITHUB_ENV
+
       # Checkout Repo
       - name: Checkout code
         uses: actions/checkout@v3
@@ -59,12 +60,3 @@ jobs:
           context: .
           push: true
           tags: ${{secrets.DOCKERHUB_USERNAME}}/weather-ml-app:${{ env.IMAGE_VERSION }}
-
-      - name: Save image version to artifact
-        run: echo "$IMAGE_VERSION" > image-version.txt
-
-      - name: Upload image version artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: image-version
-          path: image-version.txt
