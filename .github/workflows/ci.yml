@@ -54,4 +54,4 @@ jobs:
       with: 
         context: . 
         push: true 
-        tags: ${{secrets.DOCKERHUB_USERNAME}}/weather-ml-app:v2
+        tags: ${{secrets.DOCKERHUB_USERNAME}}/weather-ml-app:latest
