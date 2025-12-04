@@ -1,5 +1,5 @@
 import unittest
-from app import app, classify_weather, load_model
+from app import app, classify_weather, load_model, weather_classes
 import numpy as np
 
 class TestUnit(unittest.TestCase):
@@ -40,14 +40,14 @@ class TestUnit(unittest.TestCase):
 		class_result, _ = classify_weather(test_input) 
 
 		# Ensure that 'clear' class is returned
-		self.assertEqual(class_result, 'clear', 'Error: Expected class "clear" not returned.')
+		self.assertEqual(class_result, weather_classes[0], 'Error: Expected class "clear" not returned.')
 		
 	def test_rainy_classification_output(self):
 		test_input = np.array([279.626,998,99,1,314,0.3,0,0,88]).reshape(1,-1)
 		class_result, _ = classify_weather(test_input) 
 
 		# Ensure that 'rainy' class is returned
-		self.assertEqual(class_result, 'rainy', 'Error: Expected class "rainy" not returned.')
+		self.assertEqual(class_result, weather_classes[6], 'Error: Expected class "rainy" not returned.')
 		
 
 	def test_cloudy_classification_output(self):
