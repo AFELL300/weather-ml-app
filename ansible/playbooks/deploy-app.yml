@@ -5,7 +5,7 @@
   become: no
 
   vars:
-    app_dir: "/home/ubuntu/ansible/k8s"
+    app_dir: "/home/ubuntu/weather-ml-app/ansible/k8s"
     docker_image: "afell300/weather-ml-app:1.0"
 
   tasks:
