@@ -19,17 +19,18 @@ jobs:
           name: image-version
           path: .
 
-      - name: Set IMAGE_VERSION
-        id: set_version
-        run: echo "IMAGE_VERSION=$(cat image-version.txt)" >> $GITHUB_ENV
+      - name: Read image version into environment variable
+        run: |
+          IMAGE_VERSION=$(cat image-version.txt)
+          echo "IMAGE_VERSION=$IMAGE_VERSION" >> $GITHUB_ENV
 
       - name: Apply Kubernetes Deployment & Service
         run: |
-          sed -i "s|{{IMAGE_VERSION}}|${{ env.IMAGE_VERSION }}|g" k8s/deployment.yaml
           kubectl apply -f k8s/deployment.yaml
           kubectl apply -f k8s/service.yaml
 
       - name: Deploy to Kubernetes
         run: |
-          kubectl set image deployment/weather-ml-app weather-ml-app=afell300/weather-ml-app:${{ env.IMAGE_VERSION }}
+          kubectl set image deployment/weather-ml-app \
+            weather-ml-app=afell300/weather-ml-app:${{ env.IMAGE_VERSION }}
           kubectl rollout status deployment/weather-ml-app
