@@ -13,17 +13,15 @@ jobs:
       - name: Checkout code 
         uses: actions/checkout@v1
 
-      - name: Download image version from CI
+      - name: Download image version artifact
         uses: actions/download-artifact@v4
         with:
           name: image-version
-          path: ./version
+          path: .
 
-      - name: Read IMAGE_VERSION
-        id: get_version
-        run: |
-          IMAGE_VERSION=$(cat ./version/image_version.txt)
-          echo "IMAGE_VERSION=$IMAGE_VERSION" >> $GITHUB_ENV
+      - name: Set IMAGE_VERSION
+        id: set_version
+        run: echo "IMAGE_VERSION=$(cat image-version.txt)" >> $GITHUB_ENV
 
       - name: Apply Kubernetes Deployment & Service
         run: |
